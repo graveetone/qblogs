@@ -1,0 +1,60 @@
+{% extends 'base.html'%} {% block title%}Create{%endblock%} {% block content_title%} Створення нового поста {%endblock%} {%block content%}
+<div class="offset-md-3 col-md-6">
+    <form enctype="multipart/form-data" action="{{ url_for('posts.create_post') }}" method='POST'>
+        <img id="post_image" src="" class="offset-md-3" alt="Post image">
+    <div id="pimage">
+        <label for="post_image">Додати фото</label>
+        <input type="file" class="form-control form-control-lg" id="add_post_image" name="post_image" accept=".jpg, .jpeg, .png" onchange="previewImage(event)">
+        <br>
+        <input class="form-control" type="text" name="post_title" placeholder="Заголовок">
+        <br>
+        <input class="form-control" type="text" name="post_tags" placeholder="Теги[через пробіл]">
+        <br>
+        <input class="form-control" type="text" name="post_exturl" placeholder="Зовнішнє посилання">
+        <br>
+        <textarea id="f" class="form-control" name="post_text" placeholder="Напишіть щось тут"></textarea>
+        <br>
+        <input type="submit" value="Створити" class="offset-md-10 btn btn-danger">
+    </form>
+</div>
+<div id="emodjis">
+    <table>
+        <tr>
+            <td><button class="e"></button></td>
+            <td><button class="e"></button></td>
+            <td><button class="e"></button></td>
+            <td><button class="e"></button></td>
+            <td><button class="e"></button></td>
+        </tr>
+        <tr>
+            <td><button class="e"></button></td>
+            <td><button class="e"></button></td>
+            <td><button class="e"></button></td>
+            <td><button class="e"></button></td>
+            <td><button class="e"></button></td>
+        </tr>
+        </div>
+<script>
+    var previewImage = function(event) {
+        var preview = document.getElementById('post_image');
+        img = new Image();
+        img.src = URL.createObjectURL(event.target.files[0]);
+        img.onload = () => {
+        preview.width = (img.width +img.height)/2 < 2000 ? img.width * 0.3:img.width * 0.1//URL.createObjectURL(event.target.files[0]);
+        preview.height = (img.width +img.height)/2 < 2000 ? img.height * 0.3:img.height * 0.1//URL.createObjectURL(event.target.files[0]);
+        preview.src = img.src;
+        }
+    };
+</script>
+<script>
+    emodjis=["128514", "128550", "128525", "128546", "129324", "127881", "128079", "128293", "128175", "10084"];
+    buttons = document.getElementsByClassName("e");
+    for (let e in emodjis)
+    {
+        buttons[e].innerHTML = "&#"+emodjis[e];
+buttons[e].addEventListener("click", () => {
+    document.getElementById("f").value += buttons[e].innerHTML;
+}, false);
+    }
+    </script>
+{%endblock%}

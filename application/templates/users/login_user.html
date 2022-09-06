@@ -1,0 +1,24 @@
+{% extends 'base.html'%} {%block content_title%}
+<h1>{{ ('Увійти') }}</h1>
+<p><h3>Ще не зареєстровані?<a href="{{url_for('users.register')}}"><span style="color:firebrick;font: small-caps bold 24px/1 sans-serif;"> Приєднатися до QBlogs</span></h3></p></a>
+<br>
+{%endblock%} {% block content%}
+{% with messages = get_flashed_messages() %}
+   {% if messages %}
+      {% for message in messages %}
+          <li class="offset-md-1 col-md-4 alert alert-success" id="flash_msg">  {{message}} </li> 
+      {% endfor %}
+   {% endif %}
+{% endwith %}
+<div class="offset-md-3 col-md-6">
+    <form action="{{ url_for('users.login') }}" method="POST" name="login_user_form">
+        <div>
+            <input id="log_nick" class="form-control" type="text" name="nickname" placeholder="Нікнейм">
+        <br>
+        <input id="log_pass" class="form-control" type="password" name="password" placeholder="Пароль">
+        <br><br>
+    </div>
+    <input type="submit" id="log_in" class="offset-md-10 btn btn-danger" name="log_in" value="Увійти">
+    </form>
+</div>
+{%endblock%} {%block title%} Увійти {%endblock%}

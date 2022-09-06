@@ -1,0 +1,6 @@
+netstat -ano | findstr :<PORT>
+taskkill /PID 15056 /F
+
+python -m venv blog_env
+cd blog_env
+Scripts\activate

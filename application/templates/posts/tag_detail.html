@@ -1,0 +1,3 @@
+{% extends "base.html" %} {% block title %}Tag #{{tag.name}}{% endblock %}{% block content_title %} Пости з тегом <b><span style="color: firebrick;">#{{tag.name}}</span></b>{% endblock %}{% block content %} {% for post in posts %}
+<div id="psts" class="blockquote text-center" >
+   <p> <a id="post_href" href="{{ url_for('posts.post_detail', slug=post.slug) }}"> {{post.title}}</a></p></div> {% endfor %} {% endblock %}

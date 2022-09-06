@@ -1,0 +1,36 @@
+{% extends 'base.html'%} {%block content_title%}
+<h1 class="brand_shadow"> {{user.nickname}}</h1> {%endblock%}
+{% block content%}
+{% with messages = get_flashed_messages() %}
+   {% if messages %}
+      {% for message in messages %}
+          <li class="offset-md-3 col-md-4 alert alert-success" id="flash_msg">  {{message}} </li> 
+      {% endfor %}
+   {% endif %}
+{% endwith %}
+<div class="offset-md-3 col-md-4">
+    <form action="{{ url_for('users.main', id=user.id) }}" method="POST" enctype="multipart/form-data">
+    <div id="two_fields">
+        <input id="nick_field" class="offset-md-8 form-control" type="text" name="nickname" placeholder="Новий нікнейм">
+    <br>
+    <input id="pass_field" class="offset-md-8 form-control" type="password" name="password" placeholder="Новий пароль">
+</div>
+    <img id="user_image" src="{{url_for('static',filename=user.picture_src)}}" alt="User image">
+    <div id="new_uimage_div">
+        <label for="new_uimage">Змінити фото профілю</label>
+        <input type="file" class="form-control form-control-lg" id="new_uimage" name="new_uimage" accept=".jpg, .jpeg, .png" onchange="previewImage(event)">
+        <br><br>
+        <input type="submit" id="change_user_data" class="offset-md-4 btn btn-danger" name="change_user_data" value="Зберегти зміни">
+        <input type="submit" id="change_user_data" class="offset-md-11 btn btn-dark" name="delete_user" value="Видалити профіль">
+    </form>
+    </div>
+
+</div>
+<script>
+    var previewImage = function(event) {
+        var preview = document.getElementById('user_image');
+        preview.src = URL.createObjectURL(event.target.files[0]);
+    };
+</script>
+{%endblock%} {%block title%} {{user.nickname}} {%endblock%}
+

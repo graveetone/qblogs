@@ -1,0 +1,32 @@
+{% extends 'base.html' %} {% block title %} Posts {% endblock %} {% block content_title %}
+Пости
+{% endblock %} {% block content %} {% for post in pages.items %}
+<div id="psts">
+<p>
+    <a id="post_href" class="blockquote text-center" href="{{url_for('posts.post_detail', slug=post.slug)}} ">{{post.title}} | {{post.created.date().strftime('%d/%m/%Y').replace('/', '.')}}</a></p>
+{% endfor %}
+</div>
+<nav id="pags_list" aria-label="...">
+    <ul class="pagination justify-content-center">
+        <li {% if not pages.has_prev%} class="page-item disabled" {%endif%}>
+            <a href="./?page={{ pages.prev_num }}" class="page-link">Назад</a>
+        </li>
+
+        {% for page in pages.iter_pages() %}
+        <li {%if page==pages.page%} class="page-item active" aria-current="page" {%endif%}>
+            <a class="page-link" href="./?page={{ page }}">{{page}}</a>
+        </li>
+        {%endfor%}
+        <li {% if not pages.has_next%} class="page-item disabled" {%endif%}>
+            <a class="page-link" href="./?page={{ pages.next_num }}">Вперед</a>
+        </li>
+    </ul>
+</nav>
+{% with messages = get_flashed_messages() %}
+   {% if messages %}
+      {% for message in messages %}
+          <li class="offset-md-4 col-md-4 alert alert-success" id="flash_msg_del">  {{message}} </li> 
+      {% endfor %}
+   {% endif %}
+{% endwith %}
+{% endblock %}

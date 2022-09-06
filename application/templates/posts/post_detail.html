@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{post.title}} 
+{% endblock %}
+
+{% block content_title %}
+{{post.title}}
+{% endblock %}
+
+{% block content %}
+
+<div id="post_pic_div">
+{%if post.picture_src != "default_image"%}
+<img id="post_pic" src="{{url_for('static', filename=post.picture_src)}}">
+{%else%}
+<img id="post_pic"  src="{{url_for('static', filename='pictures/logo.png')}}">
+{%endif%} </div>
+
+<div id="author_info">
+<img id="author_image" src="{{url_for('static', filename=author.picture_src)}}">
+<p id="author_nick">Автор: {{author.nickname}}</p>
+<p id="creation_date">Створено:<br>{{post.created.date().strftime('%d/%m/%Y').replace('/', '.')}}</p>
+
+<div id="ext_url">
+    {%if ext.url != "#"%}
+    <h6>Пост містить зовнішнє посилання: <br>{{ext.title}}</h6>
+    {%else%}
+    <h6>Зовнішнє посилання недоступне</h6>
+    {%endif%}
+    <a href={{ext.url}} target="_blank"><img src={{ext.img_url}} width="150" height="150"></a>
+</div>
+</div>
+<div>
+    <form method="POST"> 
+        <input type="button" id="like_but"></input>
+    <p id="counter">{{likes}}</p>
+    
+    <input type="hidden" name="hit_like">
+</form>
+</div>
+<br>
+{%if current_user.id == author.id%}
+{%if current_user.is_authenticated%}
+<form method="POST">
+<a id="edit_post" class='btn btn-info' href="{{url_for('posts.edit_post', slug=post.slug)}}">Редагувати</a><br><br>
+
+<input id="delete_post" type="submit" name='delete_post' class="btn btn-dark" value="Видалити">
+</form>
+{%endif%}
+{%endif%} 
+<div id="tags">
+{% for tag in tags %}
+    <a href="{{ url_for('posts.tag_detail', slug=tag.slug) }}"> <span class="label">#{{tag.name}}</span> 
+{% endfor %}
+</a>
+</div>
+<br>
+<br>
+<div id="post_text">{{txt}}
+    <br><br><br><br>
+    <div>
+        <form method="POST"> 
+            <textarea name="new_comment" id="new_comment" placeholder="Прокоментувати" class="form-control" style="resize: none; width:100%; height:100px"></textarea>
+            <br>
+            <input class="btn btn-danger offset-md-11" type="button" value="Надіслати" id="send_comment">
+        <input type="hidden" name="add_comment">
+    </form>
+    <div id="s" class="comments w-50 p-3">
+        {%for c in comments%}
+        <div style='word-wrap: break-word;' id='comment_content'>
+            <img src={{url_for('static',filename=c.author.picture_src)}} id='author_pic' style='border: solid 0.5px firebrick;margin-right:2px; border-radius:100px' width='100px' height='100px'>
+            <p id='comment_text' style="display:inline-block;width:200%;"><span style="font-weight:bold;color:firebrick">{{c.author.nickname}}&nbsp;{{c.created}}</span><br><br>{{c.text}}</p>
+            <hr width='200%'size='1' color='black' align='left'>
+        </div>
+        {%endfor%}
+    </div>
+</div>
+</div>
+
+<script>
+let name = "{{isliked}}" === "True" ? "url({{url_for('static', filename='/pictures/liked.png')}})":"url({{url_for('static', filename='/pictures/not_liked.png')}})"
+$("#like_but").css("background-image", name)
+    $("#like_but").css({"width":"32px", "height":"32px", "border":"none", "cursor":"pointer", "background-color":"transparent", "float":"left"});
+    </script>
+<script>
+    $("#like_but").click(function(){
+        $.ajax({
+            type: "POST",
+            url: "{{url_for('posts.post_detail', slug=post.slug)}}",
+            data: $('form').serialize(),
+            type: 'POST',
+            success: function(response) {
+                var json = jQuery.parseJSON(response)
+                if ('redirect' in json){
+                    window.location.href = json.redirect;
+                    return
+                }
+                let name = +$('#counter').text() < +json.likes ? "url({{url_for('static', filename='/pictures/liked.png')}})":"url({{url_for('static', filename='/pictures/not_liked.png')}})"
+                $("#like_but").css("background-image", name)
+                $('#counter').html(json.likes)
+                // console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+                
+            }
+        });
+    });
+</script>
+<script>
+    $("#send_comment").click(function(){
+        $.ajax({
+            type: "POST",
+            url: "{{url_for('posts.post_detail', slug=post.slug)}}",
+            data: $('form').serialize(),
+            type: 'POST',
+            success: function(response) {
+                var json = jQuery.parseJSON(response);
+                div = "<div style='word-wrap: break-word;' id='comment_content'> </div>";
+                image = "<img id='author_pic' style='border: solid 0.5px firebrick;margin-right:2px; border-radius:100px' width='100px' height='100px'>";
+                text = "<p id='comment_text' style='display:inline-block;width:200%;'></p>";
+                $(".comments").prepend(div);
+                $("#comment_content").append(image);
+                $("#comment_content").append(text);
+                $("#author_pic").attr("src", json.picture_src);
+                $("#comment_text").html("<span style='font-weight:bold;color:firebrick'>" + json.name + "&nbsp;" + json.date + "</span><br><br>" + json.comment)
+                $("#comment_content").after("<hr width='200%'size='1' color='black' align='left'>")
+                $("#new_comment").val('');
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+</script>
+{% endblock %}

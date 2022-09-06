@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>COMMENT</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    </head>
+    <body>
+        <div>
+        <form method="POST" action="/like"> 
+            <textarea name="new_comment" id="new_comment" placeholder="Прокоментувати" class="form-control" style="resize: none; width:20%; height:100px"></textarea>
+            <br>
+            <input class="btn btn-danger" type="button" value="Надіслати" id="send_comment">
+        <input type="hidden" name="add_comment">
+    </form>
+    <div id="s" class="comments w-50 p-3"></div>
+</div>
+    </body>
+    <script>
+        $("#send_comment").click(function(){
+            $.ajax({
+                type: "POST",
+                url: "/like",
+                data: $('form').serialize(),
+                type: 'POST',
+                success: function(response) {
+                    var json = jQuery.parseJSON(response);
+                    div = "<div style='word-wrap: break-word;' id='comment_content'> </div>";
+                    image = "<img id='author_pic' style='border: solid 0.5px firebrick;margin-right:2px; border-radius:100px' width='100px' height='100px'>";
+                    text = "<p id='comment_text' style='display:inline-block;width:50%;'></p>";
+                    $(".comments").prepend(div);
+                    $("#comment_content").append(image);
+                    $("#comment_content").append(text);
+                    $("#author_pic").attr("src", json.picture_src);
+                    $("#comment_text").html("<span style='font-weight:bold;color:firebrick'>" + json.name + "&nbsp;" + json.date + "</span><br><br>" + json.comment)
+                    $("#comment_content").after("<hr width='60%'size='1' align='left'>")
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+</html>
