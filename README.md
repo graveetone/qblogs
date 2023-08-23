@@ -13,43 +13,44 @@ Steps to deploy locally
    Ubuntu guide: https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04
    <br>
    Windows guide: https://dev.mysql.com/downloads/installer/
-3. Default user for MySQL database of the project is:
+2. Default user for MySQL database of the project is
    <br>
    username: root
    password: root
-4. To create database qblogs_db run the following command in terminal:
+3. To create database qblogs_db run the following command in terminal
    <br>
    mysql -u root -p -e "CREATE DATABASE qblogs_db"
    <br>
-6. Create virtual env for better packages management:
+4. Create virtual env for better packages management
    <br>
    python -m venv venv
    <br>
-7. Activate virtual environment (ubuntu):
+5. Activate virtual environment (ubuntu)
    <br>
    source venv/bin/activate
    <br>
-8. Install all dependencies listed in requirements.txt:
+6. Install all dependencies listed in requirements.txt
    <br>
    pip install -r requirements.txt
    <br>
-9. Run migrations:
+7. Run migrations:
    <br>
    flask db upgrade
    <br>
-10. Seed the database to create user and posts:
+8. Seed the database to create user and posts
    <br>
    python seed.py
    <br>
-11. Run Flask server
+9. Run Flask server
    <br>
-  flask run
+   flask run
    <br>
-12. Run Flask in Debug Mode (optional):
-   <br>
+10. Run Flask in Debug Mode (optional)
+    <br>
     flask --debug run
-   <br>
-13. Run localhost:5000. Now you should be able to log in using creadentials:
-   <br>
+    <br>
+12. Run localhost:5000. Now you should be able to log in using creadentials
+    <br>
     login: user1
+    <br>
     password: pass1234
