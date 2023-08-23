@@ -15,7 +15,7 @@
     <br>
     <input id="pass_field" class="offset-md-8 form-control" type="password" name="password" placeholder="Новий пароль">
 </div>
-    <img id="user_image" src="{{url_for('static',filename=user.picture_src)}}" alt="User image">
+    <img id="user_image" src="{{user.picture_src}}" alt="User image">
     <div id="new_uimage_div">
         <label for="new_uimage">Змінити фото профілю</label>
         <input type="file" class="form-control form-control-lg" id="new_uimage" name="new_uimage" accept=".jpg, .jpeg, .png" onchange="previewImage(event)">

@@ -1,80 +1,82 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+            integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='pictures/favicon.png') }}">
+        <title>
+            {% block title %} Main {% endblock %} | QBlogs
+        </title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/base.css') }}">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
+            integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous">
+            </script>
+        <script src="https://code.jquery.com/jquery-3.6.0.js">
+        </script>
+    </head>
 
-<head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='pictures/favicon.png') }}">
-    <title>{% block title %} Main {% endblock %} | QBlogs</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/base.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <body>
+        <div class="mask">
+            <div class="load"></div>
+        </div>
+        <header>
+            <a href="{{ url_for('main_page') }}" id="main_page_button" class="buttons">Blogs</a>
+            <form method="GET">
+                <input id="search_field" type="text" placeholder='Щось шукаєте?' name="q"
+                    value="{{ request.args.get('q', '') }}">
+                <input type="submit" id="search_button" class="buttons" value='Пошук'>
+            </form>
 
-</head>
+            {% if current_user.is_authenticated %}
+                <a>
+                    <span id="greeting">Привіт, {{ current_user.nickname }}!</span>
+                </a>
+            {% endif %}
 
-<body>
-    <div class="mask">
-        <div class="load"></div>
-    </div>
-    <header>
-        <a href="{{url_for('main_page')}}" id="main_page_button" class="buttons">Blogs</a>
-        <form method="GET">
-            <input id="search_field" type="text" placeholder='Щось шукаєте?' name="q" value="{{ request.args.get('q', '') }}">
-            <input type="submit" id="search_button" class="buttons" value='Пошук'>
-        </form>
+            <span id="datetime"></span>
 
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('users.main', id=current_user.id) }}" id="profile_button" class="buttons">
+                    Профіль
+                </a>
+                <a href="{{ url_for('users.my_posts') }}" id="myposts_button" class="buttons">
+                    Мої пости
+                </a>
+                <a href="{{ url_for('users.logout') }}" id="go_out_button" class="buttons">
+                    Вийти
+                </a>
+                <a href="{{ url_for('posts.create_post') }}" id="add_new_but" class="buttons">
+                    +
+                </a>
+            {% endif %}
+
+            {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('users.login') }}" id="go_out_button" class="buttons">
+                    Увійти
+                </a>
+                <a href="{{url_for('users.register')}}" id="register_button" class="buttons">
+                    Створити блог
+                </a>
+            {% endif %}
+        </header>
         
-
-        {%if current_user.is_authenticated%}
-        <a> <span id="greeting" >Привіт, {{current_user.nickname}}!</span></a>
-        {%endif%}
-        <a> <span id="datetime" >02.12.2021 22<span id='forblink'>:</span>22</span></a>
-        {%if current_user.is_authenticated%}
-        <a href="{{url_for('users.main', id=current_user.id)}}" id="profile_button" class="buttons">Профіль</a>
-        <a href="{{url_for('users.my_posts') }}" id="myposts_button" class="buttons">Мої пости</a>
-        <a href="/user/logout" id="go_out_button" class="buttons">Вийти</a>
-        <a href="{{url_for('posts.create_post')}}" id="add_new_but" class="buttons">+</a>
-        {%endif%}
-        {%if not current_user.is_authenticated%}
-        <a href="/user/login" id="go_out_button" class="buttons">Увійти</a> 
-        <a href="{{url_for('users.register')}}" id="register_button" class="buttons">Створити блог</a> 
-        {%endif%}
-
-    </header>
-    <div id='content'>
-
-        <br> <b><p class="offset-1 display-4">{% block content_title %}{% endblock %}</p></b>
-        <p class="lead">{% block content %} {% endblock %}</p>
-    </div>
-   
-    <br><br>
-    <footer>
-        <h3>© QBlogs | Made by Sviatoslav Zastavskyi</h3>
-    </footer>
-</body>
-<script>
-    const weekday = new Array(7);
-weekday[0] = "Неділя";
-weekday[1] = "Понеділок";
-weekday[2] = "Вівторок";
-weekday[3] = "Середа";
-weekday[4] = "Четвер";
-weekday[5] = "П'ятниця";
-weekday[6] = "Субота";
-
-let today = new Date();
-let day = weekday[today.getDay()];
-let date = today.getDate() +'-'+(today.getMonth()+1)+'-'+ today.getFullYear();
-let time = today.getHours() + "<span id='forblink'>:</span>"+ today.getMinutes()
-let dateTime = day+', ' + date+' '+time;
-document.getElementById("datetime").innerHTML = dateTime;
-</script>
-<script>
-    let mask = document.querySelector('.mask');
-window.addEventListener('load', () => {
-    mask.classList.add('hide');
-   setTimeout(() => {
-       mask.remove();
-   }, 500)
-});
-</script>
+        <div id='content'>
+            <br>
+                <b>
+                    <p class="offset-1 display-4">
+                        {% block content_title %}{% endblock %}
+                    </p>
+                </b>
+            <p class="lead">
+                {% block content %} {% endblock %}
+            </p>
+        </div>
+        <footer>
+            <h3>
+                © QBlogs
+            </h3>
+        </footer>
+        <script src="{{ url_for('static',filename='scripts/dateTimeInHeader.js') }}"></script>
+        <script src="{{ url_for('static',filename='scripts/loader.js') }}"></script>
+    </body>
 </html>

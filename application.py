@@ -1,16 +1,8 @@
 from flask import Flask
-from flask_security.datastore import UserDatastore
 from config import Configuration
 from flask_sqlalchemy import SQLAlchemy
 
-from flask_migrate import Migrate, current
-
-from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
-
-from flask_security import SQLAlchemyUserDatastore
-
-from flask import url_for, redirect, request
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config.from_object(Configuration)
@@ -18,9 +10,8 @@ app.config.from_object(Configuration)
 db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
-from models import *
-from flask_security import current_user
 
+from models import *
 
 from flask_login import LoginManager
 

@@ -2,6 +2,18 @@
     margin-left: 10px;
 
 }
+.flex {
+    display: flex;
+}
+
+.perfect-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.column {
+    flex-direction: column;
+}
 
 header {
     margin-top: -30px;
@@ -109,7 +121,10 @@ form {
 }
 #post_pic_div
 {
-    margin: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .pagination > .active > a

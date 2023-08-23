@@ -12,13 +12,13 @@
 
 <div id="post_pic_div">
 {%if post.picture_src != "default_image"%}
-<img id="post_pic" src="{{url_for('static', filename=post.picture_src)}}">
+<img id="post_pic" src="{{post.picture_src}}">
 {%else%}
 <img id="post_pic"  src="{{url_for('static', filename='pictures/logo.png')}}">
 {%endif%} </div>
 
 <div id="author_info">
-<img id="author_image" src="{{url_for('static', filename=author.picture_src)}}">
+<img id="author_image" src="{{author.picture_src}}">
 <p id="author_nick">Автор: {{author.nickname}}</p>
 <p id="creation_date">Створено:<br>{{post.created.date().strftime('%d/%m/%Y').replace('/', '.')}}</p>
 
@@ -69,9 +69,9 @@
     <div id="s" class="comments w-50 p-3">
         {%for c in comments%}
         <div style='word-wrap: break-word;' id='comment_content'>
-            <img src={{url_for('static',filename=c.author.picture_src)}} id='author_pic' style='border: solid 0.5px firebrick;margin-right:2px; border-radius:100px' width='100px' height='100px'>
+            <img src={{author.picture_src}} id='author_pic' style='border: solid 0.5px firebrick;margin-right:2px; border-radius:100px' width='100px' height='100px'>
             <p id='comment_text' style="display:inline-block;width:200%;"><span style="font-weight:bold;color:firebrick">{{c.author.nickname}}&nbsp;{{c.created}}</span><br><br>{{c.text}}</p>
-            <hr width='200%'size='1' color='black' align='left'>
+            <hr width='200%'size='1' color='black'>
         </div>
         {%endfor%}
     </div>

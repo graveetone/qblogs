@@ -1,11 +1,5 @@
-import datetime
-from flask_migrate import current
 from application import app
-from flask import render_template
-from models import Post, User, Comment, db
-from flask import request, redirect, url_for
-from flask_login import current_user
-import json
+from flask import render_template, redirect, url_for
 
 @app.route("/about")
 def about():

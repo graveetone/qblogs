@@ -1,2 +1,12 @@
-{%extends 'base.html'%} {%block title%} NotFound {%endblock%} {%block content%}
-<div style="text-align:center;"><img style="text-align:center" src="{{url_for('static', filename='pictures/404.png')}}"><br> Вибачте, такої сторінки не знайдено! </div>{%endblock%}
+{% extends 'base.html' %}
+
+{% block title %}
+    NotFound
+{% endblock %}
+
+{% block content %}
+    <div class="flex perfect-center column">
+        <img src="{{url_for('static', filename='pictures/404.png')}}">
+        <p>Вибачте, такої сторінки не знайдено!</p>
+    </div>
+{% endblock %}
