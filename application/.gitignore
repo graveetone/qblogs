@@ -2,4 +2,4 @@ venv/
 __pycache__/
 .vscode/
 static/posts_images/
-statis/user_images/
+static/users_images/
