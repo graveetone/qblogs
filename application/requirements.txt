@@ -1,0 +1,9 @@
+flask
+flask_security
+flask_sqlalchemy
+flask_migrate
+pytz
+email_validator
+flask_admin
+mysql_connector_python
+bcrypt
